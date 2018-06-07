@@ -1,0 +1,5 @@
+---
+- name: start cosbench driver
+  command: "sh start-driver.sh"
+  args:
+    chdir: "{{path}}/{{cosbench_version}}"

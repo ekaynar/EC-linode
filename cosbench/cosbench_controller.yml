@@ -1,0 +1,8 @@
+---
+- name: Configuring controller configuration file
+  template: src=controller.conf.j2 dest="/root/v0.4.2/conf/controller.conf"
+
+- name: start cosbench controller
+  command: "sh start-controller.sh"
+  args:
+    chdir: "{{path}}/{{cosbench_version}}"

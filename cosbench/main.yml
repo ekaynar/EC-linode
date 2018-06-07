@@ -1,0 +1,36 @@
+- hosts: cosbench-controller, cosbench-driver
+  vars:
+   cosbench_version: "v0.4.2"
+   cosbench_url: https://github.com/ekaynar/Benchmarks/raw/master/cosbench/{{cosbench_version}}.tar.gz
+   path: /root
+  tasks:
+  - name: install cosbench dependencies
+    package: name={{ item }} state=present
+    with_items: 
+        - java
+        - unzip
+        - nc
+        - nmap-ncat
+        - tar
+
+  - name: Downloading COSBench binaries
+    get_url: url={{cosbench_url}} dest={{path}}
+
+  - name: Extracting COSBench binaries
+    command: tar -xvzf {{cosbench_version}}.tar.gz
+    args:
+       chdir: "{{path}}"
+
+  - name: Add executable permission
+    shell: "chmod +x *.sh"
+    args:
+      chdir: "{{path}}/{{cosbench_version}}"
+
+  - include: cosbench_driver.yml
+    when: inventory_hostname in groups['cosbench-driver']
+
+  - include: cosbench_controller.yml
+    when: inventory_hostname in groups['cosbench-controller']
+
+        
+
