@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<workload name="hybrid" description="RGW failure testing">
+
+
+<!-- Initialization -->
+  <storage type="RUNTESTstorage_type" config="timeout=RUNTESTtimeout" retry="RUNTESTretry"/>
+  <auth type="RUNTESTauth_type" config="RUNTESTconfig" />
+
+  <workflow>
+
+<!-- 
+THREE WORKSTAGES:
+1) No failures
+2) Single OSD_device failure
+3) Simulate OSD node failure by dropping network interfaces
+-->
+
+<!-- Use object sizes as defined in vars.shinc	 -->
+<!-- Operation mix is: 50% PUT, 30% GET, 10% bucket listing, 10% deletes
+-->
+
+    <workstage name="no_failure" closuredelay="RUNTESTclosuretime">
+        <work name="phase1" workers="RUNTESTworkers" runtime="RUNTESTruntime" >
+	    <operation name="readOP" type="read" ratio="RUNTESTrdRatio" config="RUNTESTrdConf" />
+            <operation name="listOP" type="list" ratio="RUNTESTlistRatio" config="RUNTESTlistConf" />
+            <operation name="writeOP" type="write" ratio="RUNTESTwrRatio" config="containers=c(1);objects=RUNTESTwrObj;sizes=RUNTESTsizes" />
+            <operation name="deleteOP" type="delete" ratio="RUNTESTdelRatio" config="containers=c(1);objects=RUNTESTdelObj" />
+        </work>
+    </workstage>
+
+    <workstage name="osd_failure" closuredelay="RUNTESTclosuretime">
+        <work name="phase2" workers="RUNTESTworkers" runtime="RUNTESTruntime" >
+ 	    <operation name="readOP" type="read" ratio="RUNTESTrdRatio" config="RUNTESTrdConf" />
+            <operation name="listOP" type="list" ratio="RUNTESTlistRatio" config="RUNTESTlistConf" />
+            <operation name="writeOP" type="write" ratio="RUNTESTwrRatio" config="containers=c(2);objects=RUNTESTwrObj;sizes=RUNTESTsizes" />
+            <operation name="deleteOP" type="delete" ratio="RUNTESTdelRatio" config="containers=c(2);objects=RUNTESTdelObj" />
+        </work>
+     </workstage>
+
+ <workstage name="node_failure" closuredelay="RUNTESTclosuretime">
+         <work name="phase3" workers="RUNTESTworkers" runtime="RUNTESTruntime" >
+ 	    <operation name="readOP" type="read" ratio="RUNTESTrdRatio" config="RUNTESTrdConf" />
+            <operation name="listOP" type="list" ratio="RUNTESTlistRatio" config="RUNTESTlistConf" />
+            <operation name="writeOP" type="write" ratio="RUNTESTwrRatio" config="containers=c(3);objects=RUNTESTwrObj;sizes=RUNTESTsizes" />
+            <operation name="deleteOP" type="delete" ratio="RUNTESTdelRatio" config="containers=c(3);objects=RUNTESTdelObj" />
+        </work>
+    </workstage>
+
+  </workflow>
+
+</workload>
