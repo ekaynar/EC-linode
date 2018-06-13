@@ -1,0 +1,77 @@
+- hosts: pbench-agent
+  vars:
+   cosbench_version: "v0.4.2"
+   cosbench_url: https://github.com/ekaynar/Benchmarks/raw/master/cosbench/{{cosbench_version}}.tar.gz
+   path: /root
+  tasks:
+  - name: install pbench dependencies
+    package: name={{ item }} state=present
+    with_items: 
+       - python-pandas
+       - wget
+
+
+  - name: install the epel rpm from a remote repo
+    yum_repository:
+       name: epel
+       description: EPEL YUM repo
+       baseurl: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+       gpgcheck: no
+       enabled: yes
+       state: present
+
+  - name: install the pbench rpm from a remote repo
+    shell: wget -O /etc/yum.repos.d/_copr_ndokos-pbench.repo https://copr.fedorainfracloud.org/coprs/ndokos/pbench/repo/epel-7/ndokos-pbench-epel-7.repo
+         
+
+  - name: install pbench
+    with_items:
+         - pbench-agent
+         - pbench-fio
+         - pbench-uperf
+         - pbench-sysstat
+    yum:
+        name: "{{item}}"
+        state: present
+
+
+- hosts: pbench-webserver
+  tasks:
+  - name: install pbench-webserver dependencies
+    with_items:
+         - httpd
+         - http-parser 
+         - tmux
+         - pbench-web-server 
+    yum:
+         name: "{{item}}" 
+         state: present
+
+
+
+  - name: configure link to javascript for graph display
+    file: 
+         path: /var/www/html/static
+         src: /opt/pbench-web-server/html/static
+         owner: apache
+         mode: ugo=rwx
+         state: link
+
+  - name: create pub/ subdirectory for pbench data
+    file:
+         path: /var/www/html/pub
+         owner: apache
+         mode: ugo=rwx
+         state: directory 
+    
+
+  - name: export pbench path
+    shell: ". /etc/profile.d/pbench-agent.sh"
+
+  - name: register all hosts for iostat and sar
+    shell:  "for tool in sar iostat; do for host in `cat pbench-agent-list` ;do pbench-register-tool --name=$tool --remote={{item}} || exit 1 ; done ; done"
+
+
+  - name: start httpd web server
+    shell: "systemctl start httpd"
+
