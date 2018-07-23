@@ -6,3 +6,34 @@
   command: "sh start-controller.sh"
   args:
     chdir: "{{path}}/{{cosbench_version}}"
+
+- name: Install python-setuptools
+  yum:
+    name: python-setuptools
+    state: present
+
+- name: Install ceph-ansible
+  yum:
+    name: ceph-ansible
+    state: present
+
+- name: Install ceph-common
+  yum:
+    name: ceph-common
+    state: present
+
+- name: install pip
+  easy_install:
+    name: pip
+    state: latest
+
+- name: install the package, force upgrade
+  pip:
+    name: setuptools
+    extra_args: --upgrade
+
+- name: install python-swiftclient
+  pip:
+    name: python-swiftclient
+    state: present
+

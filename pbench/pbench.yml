@@ -1,8 +1,4 @@
 - hosts: pbench-agent
-  vars:
-   cosbench_version: "v0.4.2"
-   cosbench_url: https://github.com/ekaynar/Benchmarks/raw/master/cosbench/{{cosbench_version}}.tar.gz
-   path: /root
   tasks:
   - name: install pbench dependencies
     package: name={{ item }} state=present
@@ -12,13 +8,11 @@
 
 
   - name: install the epel rpm from a remote repo
-    yum_repository:
-       name: epel
-       description: EPEL YUM repo
-       baseurl: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-       gpgcheck: no
-       enabled: yes
-       state: present
+    copy:
+       src: /etc/yum.repos.d/epel.repo
+       dest: /etc/yum.repos.d/ 
+       owner: root
+       mode: u=rw,g=r,o=r
 
   - name: install the pbench rpm from a remote repo
     shell: wget -O /etc/yum.repos.d/_copr_ndokos-pbench.repo https://copr.fedorainfracloud.org/coprs/ndokos/pbench/repo/epel-7/ndokos-pbench-epel-7.repo
@@ -68,9 +62,16 @@
   - name: export pbench path
     shell: ". /etc/profile.d/pbench-agent.sh"
 
-  - name: register all hosts for iostat and sar
-    shell:  "for tool in sar iostat; do for host in `cat pbench-agent-list` ;do pbench-register-tool --name=$tool --remote={{item}} || exit 1 ; done ; done"
+  - name: copy agent_list
+    copy:
+        src: pbench-agent-list
+        dest: /root/
+        owner: root
+        group: root
+        mode: 0777
 
+  - name: register all hosts for iostat and sar
+    shell:  "for tool in sar iostat; do for host in `cat pbench-agent-list` ;do pbench-register-tool --name=$tool --remote=$host || exit 1 ; done ; done"
 
   - name: start httpd web server
     shell: "systemctl start httpd"
