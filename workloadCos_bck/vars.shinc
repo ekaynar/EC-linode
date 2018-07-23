@@ -1,0 +1,147 @@
+#--------------------------------------------------------------------
+# START GLOBAL VARIABLES
+#
+
+# KEY RUNTIME VALUES - used below in PCvalues_arr and RTvalues_arr
+#
+rgwUSER="johndoe:swift"            # username
+rgwURL="rgw:8080"                  # auth_url connection point
+#rgwURL="localhost:5000"           # HAproxy auth_url connection point
+prepareWORKERS=24                  # number of workers to use for preparing the Cluster
+runtestWORKERS=108                  # number of workers for running the I/O Workload
+
+# Object sizes
+objSIZES="c(4)MB"
+
+# Number of Containers and Objects
+numCONT=1
+numOBJ=10
+numOBJincr=$(( (numOBJ + 1) ))      # increment by 1
+numOBJmax=$(( (numOBJ * 10) ))      # multiply by 10 for highest Object count
+wrCONT=$(( (numCONT + 1) ))
+
+# Conf portions for the Read and List operation statements
+rdConf="containers=c(${numCONT});objects=r(1,${numOBJ})"
+wrConf="containers=c(${wrCONT});objects=r(1,${numOBJ});sizes=${objSIZES}"
+
+
+runtime_sec=
+
+#------------------------
+# writeXML.sh variables
+PREPAREtemplate="XMLtemplates/TMPL_prepCluster.xml"
+PREPARExml="prepWorkload.xml"
+# prepCluster: pre-existing keys in the PREPAREtemplate file
+declare -a PCkeys_arr=("PREPAREstorage_type"
+                       "PREPAREtimeout"
+                       "PREPAREretry"
+                       "PREPAREauth_type"
+                       "PREPAREconfig"
+                       "PREPAREworkers"
+                       "PREPAREsizes"
+                       "PREPAREnumCont"
+                       "PREPAREnumObj"
+                       )
+declare -a PCvalues_arr=("swift"               # storage type
+                         "60000"               # timeout
+                         "3"                   # retries
+                         "swauth"              # auth_type
+                         # config: a bit messy since SED requires "/" be escaped
+                         "username=${rgwUSER};password=EMPTY;auth_url=http:\/\/${rgwURL}\/auth\/1.0"
+                         "${prepareWORKERS}"   # number of workers
+                         "${objSIZES}"         # Object sizes
+                         "${numCONT}"          # number of Containers
+                         "${numOBJ}"           # number of Objects
+                         )
+
+# RUNTEST settings
+RUNTESTtemplate="XMLtemplates/TMPL_readWrite.xml"
+RUNTESTxml="ioWorkload.xml"
+# runtest: pre-existing keys in the RUNTESTtemplate file
+declare -a RTkeys_arr=("RUNTESTstorage_type"
+                       "RUNTESTtimeout"
+                       "RUNTESTretry"
+                       "RUNTESTauth_type"
+                       "RUNTESTconfig"
+                       "RUNTESTworkers"
+                       "RUNTESTruntime"
+                       "RUNTESTsizes"
+    		       "RUNTESTwrConfig"
+    		       "RUNTESTrdConfig"
+                       "RUNTESTclosuretime"
+                       )
+declare -a RTvalues_arr=("swift"               # storage_type
+                         "60000"               # timeout
+                         "3"                   # retries
+                         "swauth"              # auth_type
+                         # config: a bit messy since SED requires "/" be escaped
+                         "username=${rgwUSER};password=EMPTY;auth_url=http:\/\/${rgwURL}\/auth\/1.0"
+                         "${runtestWORKERS}"   # workers
+                         "${runtime_sec}"      # runtime in seconds
+                         "${objSIZES}"         # Object sizes
+                         "${wrConf}"           # Write Containers
+                         "${rdConf}"            # object range for Write ops
+                         )
+ 
+#------------------------
+# PREPCLUSTER.sh variables
+longPAUSE="200s"
+
+pool_list=("default.rgw.users.keys" "default.rgw.data.root" ".rgw.root" "default.rgw.control" \
+          "default.rgw.gc" "default.rgw.buckets.data" "default.rgw.buckets.index" "default.rgw.buckets.extra" \
+          "default.rgw.log" "default.rgw.meta" "default.rgw.intent-log" "default.rgw.usage" "default.rgw.users" \
+          "default.rgw.users.email" "default.rgw.users.swift" "default.rgw.users.uid")
+
+numREPLICAS=3                # how many replicas
+preparePTYPE=rep             # Must be rep OR ec
+if [ $preparePTYPE == "rep" ]; then
+    REPLICATION="rep"
+    k=0
+    m=0
+    pg_data=2048
+    pg_index=64
+    pg=32
+    fast_read=0
+elif [ $preparePTYPE == "ec" ]; then
+    REPLICATION="ec"
+    k=4
+    m=2
+    pg_data=512
+    pg_index=32
+    pg=32
+    fast_read=0
+else
+    echo "Pool type needs to be defined as rep or ec in vars.shinc"; exit
+fi
+
+#------------------------
+# RUNTEST.sh vars
+# List of dependencies - verfied by 'chk_dependencies' function
+DEPENDENCIES_arr=(
+  "pbench-user-benchmark"    # monitoring framework
+  "ceph"                     # ceph cmdline tool
+  "ansible"                  # used to start/stop RGW svcs
+  "systemctl"                # controlling ceph svcs
+  )
+
+# Ceph cluster node IP addresses
+RGWhostname="rgw"
+
+# COSbench vars
+cosPATH="/root/v0.4.2"
+
+# Timestamp logfile
+ts="$(date +%Y%m%d-%H%M%S)"
+
+# Name of the program being run
+PROGNAME=$(basename $0)
+
+# LOGFILE - records steps
+RESULTSDIR="./RESULTS"
+LOGFILE="${RESULTSDIR}/${PROGNAME}_${ts}.log"
+# Logfile date format, customize it to your wishes
+#   - see man date for help
+DATE='date +%Y/%m/%d:%H:%M:%S'
+
+# END GLOBAL VARIABLES
+#--------------------------------------------------------------------

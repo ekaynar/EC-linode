@@ -1,0 +1,46 @@
+2018/07/19:20:28:35: runtest.sh - Created logfile: ./RESULTS/runtest.sh_20180719-202835.log
+2018/07/19:20:28:35: ** pbench-user-benchmark cosbench started as PID: 22196
+2018/07/19:20:28:37: START: IO-Workload - running... 
+2018/07/19:20:28:43: Accepted with ID: w56
+2018/07/19:20:28:43: COSbench jobID is: w56 - Started
+2018/07/19:20:39:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:40:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:41:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:42:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:43:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:44:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:45:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:46:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:47:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:48:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:49:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:50:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:51:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:52:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:53:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:54:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:55:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:56:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:57:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:58:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:20:59:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:00:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:01:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:02:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:03:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:04:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:05:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:06:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:07:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:08:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:09:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:10:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:11:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:12:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:13:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:14:04: COSbench jobID: w56 - Completed
+2018/07/19:21:14:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:15:07: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:16:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:17:08: pbench-user-benchmark process completed
+2018/07/19:21:17:08: FINALIZING: Pbench and COSbench results copied to /var/www/html/pub/w56-delete_write.20180719-202835

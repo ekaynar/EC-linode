@@ -8,36 +8,25 @@ rgwUSER="johndoe:swift"            # username
 rgwURL="rgw:8080"                  # auth_url connection point
 #rgwURL="localhost:5000"           # HAproxy auth_url connection point
 prepareWORKERS=24                  # number of workers to use for preparing the Cluster
-runtestWORKERS=96                  # number of workers for running the I/O Workload
-#runtestWORKERS=192       # number of workers for running delWrite Workload
-#runtestWORKERS=240       # number of workers for running HYBRID Workload
+runtestWORKERS=108                  # number of workers for running the I/O Workload
+
 # Object sizes
-#objSIZES="h(4|4|34,64|64|33,65536|65536|33)KB"
 objSIZES="c(4)MB"
 
 # Number of Containers and Objects
-numCONT=1000
-numOBJ=1000
-#numOBJ=43397         # for HYBRID
-#numOBJ=21698         # for delWrite
+numCONT=12
+numOBJ=10
 numOBJincr=$(( (numOBJ + 1) ))      # increment by 1
 numOBJmax=$(( (numOBJ * 10) ))      # multiply by 10 for highest Object count
-# Ratios for operation types - MUST add up to 100%
-rdRatio=60
-wrRatio=20
-delRatio=10
-listRatio=10
-totalRatio=$(( (rdRatio + wrRatio + delRatio + listRatio) ))
-if [ $totalRatio -ne 100 ]; then
-    echo "var.shinc: Operation ratios (rdRatio, wrRatio, ...) must equal 100%"; exit
-fi
+wrCONT=$(( (numCONT + 1) ))
+
 # Conf portions for the Read and List operation statements
-#   - start at 4 to reserve the first 3 containers for Write and Delete ops
-rdCONF="containers=u(4,${numCONT});objects=u(1,${numOBJ})"
-listCONF="${rdCONF}"
-# Object ranges for the Write and Delete operation statements
-wrOBJ="s(${numOBJincr},${numOBJmax})"
-delOBJ="s(1,${numOBJmax})"
+rdConf="containers=c(${numCONT});objects=r(1,${numOBJ})"
+wrConf="containers=c(${wrCONT});objects=r(1,${numOBJ});sizes=${objSIZES}"
+
+
+runtime_sec=
+
 #------------------------
 # writeXML.sh variables
 PREPAREtemplate="XMLtemplates/TMPL_prepCluster.xml"
@@ -66,8 +55,7 @@ declare -a PCvalues_arr=("swift"               # storage type
                          )
 
 # RUNTEST settings
-#RUNTESTtemplate="XMLtemplates/TMPL_hybrid.xml"
-RUNTESTtemplate="XMLtemplates/TMPL_deleteWrite.xml"
+RUNTESTtemplate="XMLtemplates/TMPL_readWrite.xml"
 RUNTESTxml="ioWorkload.xml"
 # runtest: pre-existing keys in the RUNTESTtemplate file
 declare -a RTkeys_arr=("RUNTESTstorage_type"
@@ -78,16 +66,8 @@ declare -a RTkeys_arr=("RUNTESTstorage_type"
                        "RUNTESTworkers"
                        "RUNTESTruntime"
                        "RUNTESTsizes"
-                       "RUNTESTnumCont"
-                       "RUNTESTnumObj"
-                       "RUNTESTrdRatio"
-                       "RUNTESTwrRatio"
-                       "RUNTESTdelRatio"
-                       "RUNTESTlistRatio"
-                       "RUNTESTrdConf"
-                       "RUNTESTlistConf"
-                       "RUNTESTwrObj"
-                       "RUNTESTdelObj"
+    		       "RUNTESTwrConfig"
+    		       "RUNTESTrdConfig"
                        "RUNTESTclosuretime"
                        )
 declare -a RTvalues_arr=("swift"               # storage_type
@@ -99,22 +79,13 @@ declare -a RTvalues_arr=("swift"               # storage_type
                          "${runtestWORKERS}"   # workers
                          "${runtime_sec}"      # runtime in seconds
                          "${objSIZES}"         # Object sizes
-                         "${numCONT}"          # number of Containers
-                         "${numOBJ}"           # number of Objects
-                         "${rdRatio}"          # Read ratio
-                         "${wrRatio}"          # Write ratio
-                         "${delRatio}"         # Delete ratio
-                         "${listRatio}"        # List ratio
-                         "${rdCONF}"           # config for Read operations
-                         "${listCONF}"         # config for List operations
-                         "${wrOBJ}"            # object range for Write ops
-                         "${delOBJ}"           # object range for Delete ops
-                         "${closuretime}"      # workstage closuredelay
+                         "${wrConf}"           # Write Containers
+                         "${rdConf}"            # object range for Write ops
                          )
  
 #------------------------
 # PREPCLUSTER.sh variables
-longPAUSE="200s"
+longPAUSE="60s"
 
 pool_list=("default.rgw.users.keys" "default.rgw.data.root" ".rgw.root" "default.rgw.control" \
           "default.rgw.gc" "default.rgw.buckets.data" "default.rgw.buckets.index" "default.rgw.buckets.extra" \
@@ -122,7 +93,7 @@ pool_list=("default.rgw.users.keys" "default.rgw.data.root" ".rgw.root" "default
           "default.rgw.users.email" "default.rgw.users.swift" "default.rgw.users.uid")
 
 numREPLICAS=3                # how many replicas
-preparePTYPE=rep             # Must be rep OR ec
+preparePTYPE="ec"             # Must be rep OR ec
 if [ $preparePTYPE == "rep" ]; then
     REPLICATION="rep"
     k=0
@@ -133,8 +104,8 @@ if [ $preparePTYPE == "rep" ]; then
     fast_read=0
 elif [ $preparePTYPE == "ec" ]; then
     REPLICATION="ec"
-    k=4
-    m=2
+    k=6
+    m=3
     pg_data=512
     pg_index=32
     pg=32

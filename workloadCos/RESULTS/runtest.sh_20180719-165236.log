@@ -1,0 +1,32 @@
+2018/07/19:16:52:36: runtest.sh - Created logfile: ./RESULTS/runtest.sh_20180719-165236.log
+2018/07/19:16:52:36: ** pbench-user-benchmark cosbench started as PID: 19443
+2018/07/19:16:52:38: START: IO-Workload - running... 
+2018/07/19:16:52:47: Accepted with ID: w53
+2018/07/19:16:52:47: COSbench jobID is: w53 - Started
+2018/07/19:17:03:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:04:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:05:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:06:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:07:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:08:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:09:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:10:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:11:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:12:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:13:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:14:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:15:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:16:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:17:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:18:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:19:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:20:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:21:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:22:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:23:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:24:08: COSbench jobID: w53 - Completed
+2018/07/19:17:24:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:25:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:26:08: Waiting for pbench-user-benchmark to complete
+2018/07/19:17:27:08: pbench-user-benchmark process completed
+2018/07/19:17:27:08: FINALIZING: Pbench and COSbench results copied to /var/www/html/pub/w53-delete_write.20180719-165236

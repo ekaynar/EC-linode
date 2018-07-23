@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<workload name="delete_write" description="RGW failure testing">
+
+
+<!-- Initialization -->
+  <storage type="RUNTESTstorage_type" config="timeout=RUNTESTtimeout" retry="RUNTESTretry"/>
+  <auth type="RUNTESTauth_type" config="RUNTESTconfig"/>
+
+  <workflow>
+
+   <workstage name="init_containers">
+        <work type="init" workers="1" config="containers=r(1,12)"/>
+    </workstage>
+
+    <workstage name="readWrite">
+        <work name="readWrite" workers="RUNTESTworkers" runtime="RUNTESTruntime" >
+            <operation name="writeOP" type="write" ratio=writeRatio config="RUNTESTwrConfig"/>
+	    <operation name="readOP" type="read" ratio=readRatio config="RUNTESTrdConfig"/>
+        </work>
+    </workstage>
+
+
+
+  </workflow>
+
+</workload>

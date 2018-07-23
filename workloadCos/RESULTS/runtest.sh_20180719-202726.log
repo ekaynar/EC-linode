@@ -1,0 +1,5 @@
+2018/07/19:20:27:26: runtest.sh - Created logfile: ./RESULTS/runtest.sh_20180719-202726.log
+2018/07/19:20:27:26: ** pbench-user-benchmark cosbench started as PID: 21547
+2018/07/19:20:27:28: START: IO-Workload - running... 
+2018/07/19:20:27:35: no work limits detectd, either runtime, total ops or total bytes
+2018/07/19:20:27:35: COSbench jobID is: detectd, - Started

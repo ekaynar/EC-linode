@@ -3,18 +3,18 @@
 
 <!-- Initialization -->
   <storage type="swift" config="timeout=60000" retry="3"/>
-  <auth type="swauth" config="username=johndoe:swift;password=PdQsNgQiSSAmQdOqtxghEvNfz9ysZRPRioNPtM6d;auth_url=http://rgw:8080/auth/1.0" />
+  <auth type="swauth" config="username=johndoe:swift;password=bwaaMzkPq7sgKQp8zQ2UTgao0W1TCW5OfbIEl5DZ;auth_url=http://rgw:8080/auth/1.0" />
 
   <workflow>
 
 <!-- Initialization -->
     <workstage name="init_containers">
-        <work type="init" workers="1" config="containers=r(1,1000)"/>
+        <work type="init" workers="1" config="containers=r(1,12)"/>
     </workstage>
 
 <!-- Prepare using container counts, object counts and object sizes from vars.shinc -->
     <workstage name="preparing_cluster">
-        <work type="prepare" workers="24" config="containers=r(1,1000);objects=r(1,1000);sizes=c(4)MB" >
+        <work type="prepare" workers="24" config="containers=r(1,12);objects=r(1,10);sizes=c(4)MB" >
         </work>
     </workstage>
 

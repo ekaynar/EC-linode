@@ -30,21 +30,25 @@ function create_pools {
       ceph osd erasure-code-profile rm myprofile
       ceph osd erasure-code-profile set myprofile k=$k m=$m \
         crush-failure-domain=osd
+      echo "ec"
   else
       echo "unknown value for REPLICATION in create_pools"; exit
   fi
 
   for pl in ${pool_list[@]}; do
       if [ $pl == "default.rgw.buckets.data" ]; then
-          ceph osd pool create $pl $pg_data $cmd_tail
+	  if [ "$1" == "ec" ]; then
+              ceph osd pool create $pl $pg_data $pg_data erasure myprofile
+	  fi
           if [ "$1" == "rep" ]; then
+              ceph osd pool create $pl $pg_data $pg_data replicated
               ceph osd pool set $pl size "${numREPLICAS}"
           fi
       elif [ $pl == "default.rgw.buckets.index" ]; then
-          ceph osd pool create $pl $pg_index replicated
+          ceph osd pool create $pl $pg_index $pg_index replicated
           ceph osd pool set $pl size "${numREPLICAS}"
       else
-          ceph osd pool create $pl $pg replicated
+          ceph osd pool create $pl $pg $pg replicated
           ceph osd pool set $pl size "${numREPLICAS}"
       fi
   done
@@ -67,7 +71,6 @@ ansible -m shell -a 'systemctl stop ceph-radosgw@rgw.`hostname -s`.service' rgws
 
 echo "Removing existing/old pools"
 delete_pools
-
 echo "Creating new pools"
 create_pools $REPLICATION
 
@@ -86,12 +89,18 @@ key=$(ssh $RGWhostname 'radosgw-admin user info --uid=johndoe | grep secret_key'
 sed  -i "s/password=.*;/password=$key;/g" "${PREPARExml}"
 sed  -i "s/password=.*;/password=$key;/g" "${RUNTESTxml}"
 
+# Edit the Read/Write ratio into the XML workload files
+readRatio=40
+writeRatio=60
+sed -i "s/ratio=readRatio/ratio=\"$readRatio\"/g" "${RUNTESTxml}"
+sed -i "s/ratio=writeRatio/ratio=\"$writeRatio\"/g" "${RUNTESTxml}"
+
 # pause a short bit
 sleep 5s
 
 # Run the COSbench workload to fill the cluster
-echo "starting the I/O workload to prepare the Ceph cluster"
-./Utils/cos.sh "${myPath}/${PREPARExml}"
+#echo "starting the I/O workload to prepare the Ceph cluster"
+#./Utils/cos.sh "${myPath}/${PREPARExml}"
 
 echo "$PROGNAME: Done"	
 

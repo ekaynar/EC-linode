@@ -3,44 +3,22 @@
 
 
 <!-- Initialization -->
-  <storage type="swift" config="timeout=60000" retry="3"/>
-  <auth type="swauth" config="username=johndoe:swift;password=PdQsNgQiSSAmQdOqtxghEvNfz9ysZRPRioNPtM6d;auth_url=http://rgw:8080/auth/1.0"/>
+  <storage type="swift" config="timeout=120000" retry="3"/>
+  <auth type="swauth" config="username=johndoe:swift;password=bwaaMzkPq7sgKQp8zQ2UTgao0W1TCW5OfbIEl5DZ;auth_url=http://rgw:8080/auth/1.0"/>
 
   <workflow>
 
-<!-- 
-Three Phases:
-1) No failures 
-2) Single OSD_device failure 
-3) Simulate loss of OSD node by dropping a network interface
--->
+   <workstage name="init_containers">
+        <work type="init" workers="1" config="containers=r(1,12)"/>
+    </workstage>
 
-<!-- Use object counts and object sizes as defined in vars.shinc -->
-<!-- Operation mix is: 60% write, 40% delete
-     -->
-
-    <workstage name="no_failure" closuredelay="">
-        <work name="writeDelete1" workers="96" runtime="" >
-            <operation name="writeOP" type="write" ratio="60" config="containers=c(1);objects=s(1001,10000);sizes=c(4)MB" />
-	    <operation name="deleteOP" type="delete" ratio="40" config="containers=c(1);objects=s(1,10000)" />
+    <workstage name="readWrite">
+        <work name="readWrite" workers="108" totalOps="60000" division="container" >
+            <operation name="writeOP" type="write" ratio="100" config="containers=s(1,6);objects=r(1,10000);sizes=c(8)MB"/>
         </work>
     </workstage>
 
 
-    <workstage name="osd_failure" closuredelay="">
-        <work name="writeDelete2" workers="96" runtime="" >
-            <operation name="writeOP" type="write" ratio="60" config="containers=c(2);objects=s(1001,10000);sizes=c(4)MB" />
-	    <operation name="deleteOP" type="delete" ratio="40" config="containers=c(2);objects=s(1,10000)" />
-        </work>
-    </workstage>
-
-
-    <workstage name="node_failure" closuredelay="">
-        <work name="writeDelete3" workers="96" runtime="" >
-             <operation name="writeOP" type="write" ratio="60" config="containers=c(3);objects=s(1001,10000);sizes=c(4)MB" />
-	    <operation name="deleteOP" type="delete" ratio="40" config="containers=c(3);objects=s(1,10000)" />
-        </work>
-    </workstage>
 
   </workflow>
 

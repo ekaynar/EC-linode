@@ -1,0 +1,34 @@
+2018/07/19:21:32:19: runtest.sh - Created logfile: ./RESULTS/runtest.sh_20180719-213219.log
+2018/07/19:21:32:19: ** pbench-user-benchmark cosbench started as PID: 20871
+2018/07/19:21:32:21: START: IO-Workload - running... 
+2018/07/19:21:32:32: Accepted with ID: w58
+2018/07/19:21:32:32: COSbench jobID is: w58 - Started
+2018/07/19:21:42:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:43:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:44:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:45:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:46:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:47:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:48:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:49:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:50:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:51:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:52:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:53:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:54:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:55:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:56:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:57:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:58:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:21:59:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:00:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:01:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:02:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:03:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:04:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:05:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:06:51: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:07:52: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:08:52: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:09:52: Waiting for pbench-user-benchmark to complete
+2018/07/19:22:10:42: COSbench jobID: w58 - Completed
