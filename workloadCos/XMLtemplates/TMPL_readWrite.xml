@@ -8,9 +8,6 @@
 
   <workflow>
 
-   <workstage name="init_containers">
-        <work type="init" workers="1" config="containers=r(1,12)"/>
-    </workstage>
 
     <workstage name="readWrite">
         <work name="readWrite" workers="RUNTESTworkers" runtime="RUNTESTruntime" >

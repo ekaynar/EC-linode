@@ -1,0 +1,6 @@
+2018/07/31:23:02:43: runtest.sh - Created logfile: ./RESULTS/runtest.sh_20180731-230243.log
+2018/07/31:23:02:43: ** pbench-user-benchmark cosbench started as PID: 9017
+2018/07/31:23:02:45: START: IO-Workload - running... 
+2018/07/31:23:02:50: Accepted with ID: w15
+2018/07/31:23:02:50: COSbench jobID is: w15 - Started
+2018/07/31:23:04:10: COSbench jobID: w15 - Completed

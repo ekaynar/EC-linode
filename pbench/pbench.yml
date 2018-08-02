@@ -21,8 +21,8 @@
   - name: install pbench
     with_items:
          - pbench-agent
-         - pbench-fio
-         - pbench-uperf
+         #- pbench-fio
+         #- pbench-uperf
          - pbench-sysstat
     yum:
         name: "{{item}}"

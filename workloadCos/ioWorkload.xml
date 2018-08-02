@@ -3,18 +3,16 @@
 
 
 <!-- Initialization -->
-  <storage type="swift" config="timeout=120000" retry="3"/>
-  <auth type="swauth" config="username=johndoe:swift;password=bwaaMzkPq7sgKQp8zQ2UTgao0W1TCW5OfbIEl5DZ;auth_url=http://rgw:8080/auth/1.0"/>
+  <storage type="swift" config="timeout=90000" retry="3"/>
+  <auth type="swauth" config="username=johndoe:swift;password=uzf5WAWXvCEUcqRR7lgqsWnZ64AShUhZ8rEycIA6;auth_url=http://rgw:8080/auth/1.0"/>
 
   <workflow>
 
-   <workstage name="init_containers">
-        <work type="init" workers="1" config="containers=r(1,12)"/>
-    </workstage>
 
     <workstage name="readWrite">
-        <work name="readWrite" workers="108" totalOps="60000" division="container" >
-            <operation name="writeOP" type="write" ratio="100" config="containers=s(1,6);objects=r(1,10000);sizes=c(8)MB"/>
+        <work name="readWrite" workers="360" runtime="1000" >
+            <operation name="writeOP" type="write" ratio="50" config="containers=c(3);objects=u(1,52000000);sizes=c(4)MB"/>
+	    <operation name="readOP" type="read" ratio="50" config="containers=c(1);objects=u(1,52000)"/>
         </work>
     </workstage>
 

@@ -14,7 +14,7 @@ runtestWORKERS=108                  # number of workers for running the I/O Work
 objSIZES="c(4)MB"
 
 # Number of Containers and Objects
-numCONT=12
+numCONT=1
 numOBJ=10
 numOBJincr=$(( (numOBJ + 1) ))      # increment by 1
 numOBJmax=$(( (numOBJ * 10) ))      # multiply by 10 for highest Object count
@@ -85,7 +85,7 @@ declare -a RTvalues_arr=("swift"               # storage_type
  
 #------------------------
 # PREPCLUSTER.sh variables
-longPAUSE="60s"
+longPAUSE="40s"
 
 pool_list=("default.rgw.users.keys" "default.rgw.data.root" ".rgw.root" "default.rgw.control" \
           "default.rgw.gc" "default.rgw.buckets.data" "default.rgw.buckets.index" "default.rgw.buckets.extra" \
@@ -98,17 +98,17 @@ if [ $preparePTYPE == "rep" ]; then
     REPLICATION="rep"
     k=0
     m=0
-    pg_data=1024
-    pg_index=32
-    pg=32
+    pg_data=512
+    pg_index=16
+    pg=8
     fast_read=0
 elif [ $preparePTYPE == "ec" ]; then
     REPLICATION="ec"
-    k=6
-    m=3
-    pg_data=512
-    pg_index=32
-    pg=32
+    k=4
+    m=2
+    pg_data=256
+    pg_index=16
+    pg=8
     fast_read=0
 else
     echo "Pool type needs to be defined as rep or ec in vars.shinc"; exit

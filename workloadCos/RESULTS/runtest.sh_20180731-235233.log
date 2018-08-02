@@ -1,0 +1,20 @@
+2018/07/31:23:52:33: runtest.sh - Created logfile: ./RESULTS/runtest.sh_20180731-235233.log
+2018/07/31:23:52:33: ** pbench-user-benchmark cosbench started as PID: 18382
+2018/07/31:23:52:35: START: IO-Workload - running... 
+2018/07/31:23:52:40: Accepted with ID: w18
+2018/07/31:23:52:40: COSbench jobID is: w18 - Started
+2018/08/01:00:03:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:04:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:05:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:06:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:07:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:08:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:09:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:10:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:11:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:12:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:13:00: COSbench jobID: w18 - Completed
+2018/08/01:00:13:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:14:05: Waiting for pbench-user-benchmark to complete
+2018/08/01:00:15:05: pbench-user-benchmark process completed
+2018/08/01:00:15:06: FINALIZING: Pbench and COSbench results copied to /var/www/html/pub/w18-delete_write.20180731-235233

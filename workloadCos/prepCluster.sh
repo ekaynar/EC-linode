@@ -30,16 +30,15 @@ function create_pools {
       ceph osd erasure-code-profile rm myprofile
       ceph osd erasure-code-profile set myprofile k=$k m=$m \
         crush-failure-domain=osd
-      echo "ec"
   else
       echo "unknown value for REPLICATION in create_pools"; exit
   fi
 
   for pl in ${pool_list[@]}; do
       if [ $pl == "default.rgw.buckets.data" ]; then
-	  if [ "$1" == "ec" ]; then
+          if [ "$1" == "ec" ]; then
               ceph osd pool create $pl $pg_data $pg_data erasure myprofile
-	  fi
+          fi
           if [ "$1" == "rep" ]; then
               ceph osd pool create $pl $pg_data $pg_data replicated
               ceph osd pool set $pl size "${numREPLICAS}"
@@ -71,6 +70,7 @@ ansible -m shell -a 'systemctl stop ceph-radosgw@rgw.`hostname -s`.service' rgws
 
 echo "Removing existing/old pools"
 delete_pools
+
 echo "Creating new pools"
 create_pools $REPLICATION
 
@@ -99,8 +99,8 @@ sed -i "s/ratio=writeRatio/ratio=\"$writeRatio\"/g" "${RUNTESTxml}"
 sleep 5s
 
 # Run the COSbench workload to fill the cluster
-#echo "starting the I/O workload to prepare the Ceph cluster"
-#./Utils/cos.sh "${myPath}/${PREPARExml}"
+echo "starting the I/O workload to prepare the Ceph cluster"
+./Utils/cos.sh "${myPath}/${PREPARExml}"
 
 echo "$PROGNAME: Done"	
 

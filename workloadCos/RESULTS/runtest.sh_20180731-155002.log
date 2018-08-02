@@ -1,0 +1,22 @@
+2018/07/31:15:50:02: runtest.sh - Created logfile: ./RESULTS/runtest.sh_20180731-155002.log
+2018/07/31:15:50:02: ** pbench-user-benchmark cosbench started as PID: 12202
+2018/07/31:15:50:04: START: IO-Workload - running... 
+2018/07/31:15:50:10: Accepted with ID: w3
+2018/07/31:15:50:10: COSbench jobID is: w3 - Started
+2018/07/31:16:00:34: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:01:34: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:02:34: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:03:34: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:04:34: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:05:34: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:06:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:07:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:08:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:09:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:10:30: COSbench jobID: w3 - Completed
+2018/07/31:16:10:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:11:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:12:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:13:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:14:35: Waiting for pbench-user-benchmark to complete
+2018/07/31:16:15:35: Waiting for pbench-user-benchmark to complete

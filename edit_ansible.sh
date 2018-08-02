@@ -36,7 +36,6 @@ pbench_agent=`cat ~/ceph-linode/ansible_inventory | grep osd |awk {'print $2'} |
 
 rm -rf pbench-agent-list
 
-echo "[pbench-agent]" >> /etc/ansible/hosts
 for item in ${pbench_agent}
 do
         echo $item >> pbench-agent-list
