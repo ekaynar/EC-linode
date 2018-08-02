@@ -16,7 +16,7 @@ Uses COSbench to apply I/O workload; pbench for monitoring the OSDs, and SSh scr
     * cosBenchParser.py - Parse Cosbenhc csv files
 
 # Setting up the Ceph Cluster
-  Follow the steps defined in [ceph-linode-installation](EC-linode/ceph-linode-installation.md)
+  Follow the steps defined in [ceph-linode-installation](https://github.com/ekaynar/EC-linode/blob/master/ceph-linode-installation.md)
  
 # Installing and configuring COSBench, pbench and SPark
  ```
