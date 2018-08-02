@@ -11,6 +11,9 @@ Uses COSbench to apply I/O workload; pbench for monitoring the OSDs, and SSh scr
     * writeXML.sh - create XML templates for COSbench workloads
     * prepCluster.sh - Prepare Cluster for the test and fill it with data
     * runtest.sh - Run the actual IO workload
+  * postprocess - Directory for Parsing Cosbench Results
+    * logParser.py - Parse log file of the test
+    * cosBenchParser.py - Parse Cosbenhc csv files
 
 # Setting up the Ceph Cluster
   Follow the steps defined in [ceph-linode-installation](EC-linode/ceph-linode-installation.md)
