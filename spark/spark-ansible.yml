@@ -1,0 +1,64 @@
+- hosts: spark-master, spark-slave
+  vars:  
+   spark_version: "spark-2.3.1-bin-hadoop2.7"
+   spark_url: http://mirrors.gigenet.com/apache/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz 
+   path: /root
+   spark_dir: "spark"
+   data_dir: /root/sparkdata 
+
+
+  tasks:
+  - name: install Spark dependencies
+    package: name={{ item }} state=present
+    with_items:
+        - java
+
+  - name: Downloading Spark binaries
+    get_url: url={{spark_url}} dest={{path}}
+
+  - name: Extracting Spark binaries
+    command: tar -xvf {{spark_version}}.tgz
+    args:
+       chdir: "{{path}}"
+
+  - name: Remove old files
+    file: path={{path}}/{{spark_dir}} state=absent
+
+  - name: Move {{spark_version}} to {{spark_dir}}
+    command: mv {{path}}/{{spark_version}} {{path}}/{{spark_dir}} 
+
+  - name: Set up the enviroment for Spark
+    lineinfile: 
+        path: /root/.bashrc 
+        line: 'export JAVA_HOME=/usr/'
+        line: 'export SPARK_HOME={{path}}/{{spark_dir}}'
+        line: 'export PATH=$PATH:$SPARK_HOME/bin'
+        state: present
+
+  - name: Configuring spark-master configuration file
+    template: src=spark-master.conf.j2 dest="{{spark_dir}}/conf/spark-env.sh"
+
+  - name: Create data dir for workers
+    file: 
+        path: "{{data_dir}}"
+        state: directory  
+
+  - name: Create data dir for workers
+    lineinfile: 
+        path: "{{spark_dir}}/conf/spark-env.sh"
+        line: 'SPARK_WORKER_DIR={{data_dir}}'
+        state: present
+
+  - name: Create slave files
+    when: inventory_hostname in groups['spark-master']    
+    template: src=slaves.conf.j2 dest="{{spark_dir}}/conf/slaves"
+
+  - name: Create spark-defaults.conf
+    template: src=spark-defaults.conf.j2 dest="{{spark_dir}}/conf/spark-defaults.conf"
+
+  - name: Set up the enviroment for Spark
+    lineinfile: 
+        path: "{{spark_dir}}/conf/spark-defaults.conf.template" 
+        line: 'spark.master spark://10.128.1.138:7077'
+        state: present
+

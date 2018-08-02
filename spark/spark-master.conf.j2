@@ -1,0 +1,9 @@
+# {{ ansible_managed }}
+SPARK_WORKER_MEMORY=1g
+SPARK_WORKER_INSTANCES={%for host in groups['spark-slave'] %}{% if loop.index == 1 %}{{loop.length}}{% endif %}{% endfor %} 
+{% for host in groups['spark-master'] %}
+SPARK_MASTER_IP={{hostvars[host]['ansible_all_ipv4_addresses'][1]}}
+{% endfor %}
+
+
+	

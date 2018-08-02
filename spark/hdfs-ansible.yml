@@ -1,0 +1,113 @@
+- hosts: spark-master, spark-slave
+  vars:  
+   spark_version: "spark-2.3.1-bin-hadoop2.7"
+   hdfs_version: "hadoop-2.7.6"
+   spark_url: http://mirrors.advancedhosters.com/apache/spark/spark-2.3.1/spark-2.3.1-bin-hadoop2.7.tgz
+   hdfs_url: http://mirror.cc.columbia.edu/pub/software/apache/hadoop/common/hadoop-2.7.6/hadoop-2.7.6.tar.gz 
+   path: /root
+   spark_dir: "spark"
+   hdfs_dir: "hadoop"
+   data_dir: /root/sparkdata 
+   name_dir: /root/hadoop_name 
+
+
+  tasks:
+  - name: install Spark dependencies
+    package: name={{ item }} state=present
+    with_items:
+        - java
+
+  - name: Downloading Spark binaries
+    get_url: url={{ item }} dest={{path}}
+    with_items:
+        - "{{spark_url}}"
+        - "{{hdfs_url}}"
+        
+  - name: Extracting Spark binaries
+    command: tar -xvf {{spark_version}}.tgz
+    args:
+       chdir: "{{path}}"
+
+  - name: Extracting HDFS binaries
+    command: tar -xvf {{hdfs_version}}.tar.gz
+    args:
+       chdir: "{{path}}"
+  
+  - name: Remove old files
+    file:
+        path: "{{ item }}" 
+        state: absent
+    with_items:
+        - "{{ path }}/{{ spark_dir }}"
+        - "{{ path}}/{{ hdfs_dir }}"
+        - "{{ data_dir }}"
+        - "{{ name_dir }}"
+
+  - name: Move {{spark_version}} to {{spark_dir}}
+    command: mv {{path}}/{{spark_version}} {{path}}/{{spark_dir}} 
+
+  - name: Move {{hdfs_version}} to {{hdfs_dir}}
+    command: mv {{path}}/{{hdfs_version}} {{path}}/{{hdfs_dir}} 
+  
+  - name: Set up the enviroment for Spark and HDFS
+    lineinfile: 
+        path: /root/.bashrc 
+        line: "{{ item }}" 
+        state: present
+    with_items:
+        - 'export JAVA_HOME=/usr/'
+        - 'export SPARK_HOME={{path}}/{{spark_dir}}'
+        - 'export PATH=$PATH:$SPARK_HOME/bin'
+        - 'export HADOOP_HOME=/root/{{hdfs_dir}}'
+        - 'export PATH=$PATH:$HADOOP_HOME/bin'
+        - 'export HDFS_NAMENODE_USER="root"'
+        - 'export HDFS_DATANODE_USER="root"'
+        - 'export HDFS_SECONDARYNAMENODE_USER="root"'
+        - 'export YARN_RESOURCEMANAGER_USER="root"'
+        - 'export YARN_NODEMANAGER_USER="root"'
+
+  - name: source bashrc
+    shell: . /root/.bashrc 
+ 
+  - name: Configuring spark-master configuration file
+    template: src=spark-master.conf.j2 dest="{{spark_dir}}/conf/spark-env.sh"
+
+  - name: Create namenode dir for workers
+    file: 
+        path: "{{name_dir}}"
+        state: directory  
+
+  - name: Create data dir for workers
+    file: 
+        path: "{{data_dir}}"
+        state: directory  
+
+  - name: Create data dir for workers
+    lineinfile: 
+        path: "{{spark_dir}}/conf/spark-env.sh"
+        line: 'SPARK_WORKER_DIR={{data_dir}}'
+        state: present
+
+
+  - name: Setup the environment for HDFS slaves
+    when: inventory_hostname in groups['spark-slave'] and inventory_hostname not in groups['spark-master']
+    include: config_hdfs_slave.yml
+
+  - name: Setup the environment for HDFS master
+    when: inventory_hostname in groups['spark-master']
+    include: config_hdfs.yml
+
+  - name: Create slave files
+    when: inventory_hostname in groups['spark-master']    
+    template: src=slaves.conf.j2 dest="{{spark_dir}}/conf/slaves"
+
+
+  - name: Create spark-defaults.conf
+    template: src=spark-defaults.conf.j2 dest="{{spark_dir}}/conf/spark-defaults.conf"
+
+  - name: Set up the enviroment for Spark
+    lineinfile: 
+        path: "{{spark_dir}}/conf/spark-defaults.conf.template" 
+        line: 'spark.master spark://10.128.1.138:7077'
+        state: present
+

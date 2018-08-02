@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+{% for host in groups['spark-master'] %}
+spark.master spark://{{hostvars[host]['ansible_all_ipv4_addresses'][1]}}:7077
+{% endfor %}
+
+
+	
