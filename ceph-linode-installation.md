@@ -4,7 +4,7 @@
   ```
   mkdir /root/staging_area/
   cd /root/staging_area
-  wget http://download-node-02.eng.bos.redhat.com/composes/auto/ceph-3.0-rhel-7/latest-RHCEPH-3-RHEL-7/compose/OSD/x86_64/iso/RHCEPH-3.0-RHEL-7-20180604.ci.0-x86_64-dvd.iso
+  wget http://download-node-02.eng.bos.redhat.com/composes/auto/ceph-3.1-rhel-7/latest-RHCEPH-3-RHEL-7/compose/OSD/x86_64/iso/RHCEPH-3.1-RHEL-7-20180731.ci.0-x86_64-dvd.iso
   ```
  * Mount the iso file for Ceph
  ```
